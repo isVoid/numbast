@@ -193,6 +193,14 @@ def find_clang_cuda_runtime_wrapper_h(dirs):
     return None
 
 
+def find_cuda_wrapper_folder(dirs):
+    name = "cuda_wrappers"
+    for dir in dirs:
+        if name in dir.lower():
+            return dir
+    return None
+
+
 def parse_declarations_from_source(
     source_file_path: str,
     files_to_retain: list[str],
@@ -286,6 +294,9 @@ def parse_declarations_from_source(
     clang_cuda_runtime_wrapper_h = find_clang_cuda_runtime_wrapper_h(clang_search_paths)
     include_clang_cuda_wrapper = [f"-include{clang_cuda_runtime_wrapper_h}"] if clang_cuda_runtime_wrapper_h else []
 
+    cuda_wrapper_folder = find_cuda_wrapper_folder(clang_search_paths)
+    include_cuda_wrapper = [f"-internal-isystem{cuda_wrapper_folder}"] if cuda_wrapper_folder else []
+
     # The include paths are ordered a below:
     # 1. clang resource file include directory (via -isystem flag)
     # 2. default compiler search paths (clang cuda wrapper headers)
@@ -302,6 +313,7 @@ def parse_declarations_from_source(
         "-nocudalib",
         "--no-cuda-version-check",
         *include_clang_cuda_wrapper,
+        *include_cuda_wrapper,
         f"--cuda-gpu-arch={compute_capability}",
         f"-std={cxx_standard}",
         f"-isystem{clang_resource_file}/include/",
