@@ -291,11 +291,21 @@ def parse_declarations_from_source(
 
     clang_verbose_flag = ["--verbose"] if verbose else []
 
-    clang_cuda_runtime_wrapper_h = find_clang_cuda_runtime_wrapper_h(clang_search_paths)
-    include_clang_cuda_wrapper = [f"-include{clang_cuda_runtime_wrapper_h}"] if clang_cuda_runtime_wrapper_h else []
+    clang_cuda_runtime_wrapper_h = find_clang_cuda_runtime_wrapper_h(
+        clang_search_paths
+    )
+    include_clang_cuda_wrapper = (
+        [f"-include{clang_cuda_runtime_wrapper_h}"]
+        if clang_cuda_runtime_wrapper_h
+        else []
+    )
 
     cuda_wrapper_folder = find_cuda_wrapper_folder(clang_search_paths)
-    include_cuda_wrapper = [f"-internal-isystem{cuda_wrapper_folder}"] if cuda_wrapper_folder else []
+    include_cuda_wrapper = (
+        [f"-internal-isystem{cuda_wrapper_folder}"]
+        if cuda_wrapper_folder
+        else []
+    )
 
     # The include paths are ordered a below:
     # 1. clang resource file include directory (via -isystem flag)
@@ -305,7 +315,8 @@ def parse_declarations_from_source(
     command_line_options = [
         "clang++",
         *clang_verbose_flag,
-        "-Xclang", "-fcuda-allow-variadic-functions",
+        "-Xclang",
+        "-fcuda-allow-variadic-functions",
         "--cuda-device-only",
         "-xcuda",
         # f"--cuda-path={cuda_path}",
@@ -393,6 +404,7 @@ def value_from_constexpr_vardecl(
     """
 
     import pytest
+
     pytest.skip()
 
     with tempfile.NamedTemporaryFile(mode="w") as f:
