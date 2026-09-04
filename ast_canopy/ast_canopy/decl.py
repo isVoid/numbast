@@ -6,8 +6,7 @@ import typing
 from functools import cached_property
 
 from ast_canopy import pylibastcanopy as bindings
-
-from ast_canopy.instantiations import FunctionInstantiation, ClassInstantiation
+from ast_canopy.instantiations import ClassInstantiation, FunctionInstantiation
 
 CXX_OP_TO_PYTHON_OP = {
     "+": [operator.pos, operator.add],
@@ -77,6 +76,8 @@ class Function:
         mangled_name: str,
         attributes: str,
         parse_entry_point: str,
+        is_c_linkage: bool | None = None,
+        is_variadic: bool = False,
     ):
         self.name = name
         self.qual_name = qual_name
@@ -88,6 +89,8 @@ class Function:
         self.is_constexpr = is_constexpr
         self.mangled_name = mangled_name
         self.attributes = attributes
+        self.is_c_linkage = is_c_linkage
+        self.is_variadic = is_variadic
 
         self.parse_entry_point = parse_entry_point
 
@@ -169,6 +172,8 @@ class Function:
             c_obj.mangled_name,
             c_obj.attributes,
             parse_entry_point,
+            getattr(c_obj, "is_c_linkage", None),
+            getattr(c_obj, "is_variadic", False),
         )
 
 
