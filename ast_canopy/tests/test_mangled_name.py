@@ -78,3 +78,13 @@ def test_c_linkage_metadata_survives_pickle(decls):
     assert functions["c_device_func"].is_variadic is False
     assert functions["c_variadic_func"].is_c_linkage is True
     assert functions["c_variadic_func"].is_variadic is True
+
+
+def test_variadic_member_function_metadata_survives_pickle(decls):
+    foo = next(struct for struct in decls.structs if struct.name == "Foo")
+    method = next(
+        method for method in foo.methods if method.name == "variadic_member"
+    )
+
+    assert method.is_variadic is True
+    assert pickle.loads(pickle.dumps(method)).is_variadic is True

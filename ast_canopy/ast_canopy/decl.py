@@ -259,6 +259,7 @@ class StructMethod(Function):
         mangled_name: str,
         attributes: str,
         parse_entry_point: str,
+        is_variadic: bool = False,
     ):
         super().__init__(
             name,
@@ -270,6 +271,7 @@ class StructMethod(Function):
             mangled_name,
             attributes,
             parse_entry_point,
+            is_variadic=is_variadic,
         )
         self.kind = kind
         self.is_move_constructor = is_move_constructor
@@ -302,6 +304,7 @@ class StructMethod(Function):
             c_obj.mangled_name,
             c_obj.attributes,
             parse_entry_point,
+            getattr(c_obj, "is_variadic", False),
         )
 
 

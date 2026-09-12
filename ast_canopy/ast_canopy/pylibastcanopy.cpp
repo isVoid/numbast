@@ -242,9 +242,11 @@ PYBIND11_MODULE(pylibastcanopy, m) {
               throw std::runtime_error(
                   "Invalid class template state during unpickle!");
             Function f = t[0].cast<Function>();
-            return Method{f.name,      f.return_type,
+            Method method{f.name,      f.return_type,
                           f.params,    f.exec_space,
                           f.qual_name, t[1].cast<method_kind>()};
+            method.is_variadic = f.is_variadic;
+            return method;
           }));
 
   py::class_<Record>(m, "Record")
