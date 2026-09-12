@@ -86,5 +86,8 @@ def test_variadic_member_function_metadata_survives_pickle(decls):
         method for method in foo.methods if method.name == "variadic_member"
     )
 
+    assert method.is_c_linkage is False
     assert method.is_variadic is True
-    assert pickle.loads(pickle.dumps(method)).is_variadic is True
+    restored = pickle.loads(pickle.dumps(method))
+    assert restored.is_c_linkage is False
+    assert restored.is_variadic is True

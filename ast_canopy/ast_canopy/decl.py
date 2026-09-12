@@ -260,6 +260,7 @@ class StructMethod(Function):
         attributes: str,
         parse_entry_point: str,
         is_variadic: bool = False,
+        is_c_linkage: bool | None = None,
     ):
         super().__init__(
             name,
@@ -271,6 +272,7 @@ class StructMethod(Function):
             mangled_name,
             attributes,
             parse_entry_point,
+            is_c_linkage=is_c_linkage,
             is_variadic=is_variadic,
         )
         self.kind = kind
@@ -304,7 +306,8 @@ class StructMethod(Function):
             c_obj.mangled_name,
             c_obj.attributes,
             parse_entry_point,
-            getattr(c_obj, "is_variadic", False),
+            is_variadic=getattr(c_obj, "is_variadic", False),
+            is_c_linkage=getattr(c_obj, "is_c_linkage", None),
         )
 
 

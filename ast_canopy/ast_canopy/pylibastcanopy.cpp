@@ -245,6 +245,7 @@ PYBIND11_MODULE(pylibastcanopy, m) {
             Method method{f.name,      f.return_type,
                           f.params,    f.exec_space,
                           f.qual_name, t[1].cast<method_kind>()};
+            method.is_c_linkage = f.is_c_linkage;
             method.is_variadic = f.is_variadic;
             return method;
           }));
